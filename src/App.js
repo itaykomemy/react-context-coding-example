@@ -1,28 +1,30 @@
-import { useState } from "react";
 import { places } from "./data.js";
 import { getImageUrl } from "./utils.js";
 import { ImageSizeContext } from "./Context.js";
 import { useContext } from "react";
 
+function Switch() {
+  const { isLarge, setIsLarge } = useContext(ImageSizeContext);
+  return (
+    <label>
+      <input
+        type="checkbox"
+        checked={isLarge}
+        onChange={(e) => {
+          setIsLarge(e.target.checked);
+        }}
+      />
+      Use large images
+    </label>
+  );
+}
+
 export default function App() {
-  const [isLarge, setIsLarge] = useState(false);
-  const imageSize = isLarge ? 150 : 100;
   return (
     <>
-      <ImageSizeContext.Provider value={imageSize}>
-        <label>
-          <input
-            type="checkbox"
-            checked={isLarge}
-            onChange={(e) => {
-              setIsLarge(e.target.checked);
-            }}
-          />
-          Use large images
-        </label>
-        <hr />
-        <List />
-      </ImageSizeContext.Provider>
+      <Switch />
+      <hr />
+      <List />
     </>
   );
 }
@@ -37,6 +39,7 @@ function List() {
 }
 
 function Place({ place }) {
+  console.log("place is rendered");
   return (
     <>
       <PlaceImage place={place} />
@@ -49,7 +52,7 @@ function Place({ place }) {
 }
 
 function PlaceImage({ place }) {
-  const imageSize = useContext(ImageSizeContext);
+  const { imageSize } = useContext(ImageSizeContext);
   return (
     <img
       src={getImageUrl(place)}
